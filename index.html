@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Call Center Order Entry</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="page-shell">
+    <section class="card customer-card compact-customer-card">
+      <div class="customer-top-row">
+        <div class="customer-search-cluster">
+          <div class="mini-section-label">Customer</div>
+          <div class="search-input-wrap customer-bar-wrap">
+            <input
+              id="customerSearchInput"
+              class="input customer-main-input"
+              type="text"
+              placeholder="Search customer by name, phone, code, or type"
+              autocomplete="off"
+            />
+            <button id="customerSearchBtn" class="customer-search-btn" type="button" aria-label="Search customer">🔍</button>
+            <div id="customerResults" class="overlay-list hidden"></div>
+          </div>
+        </div>
+
+        <div class="currency-chip">GBP</div>
+      </div>
+
+      <div id="customerInfoPanel" class="customer-info-panel hidden">
+        <div class="customer-meta-row">
+          <div class="customer-meta-pill">
+            <span class="meta-label">Contact</span>
+            <span id="customerContactName" class="meta-value">-</span>
+          </div>
+
+          <div class="customer-meta-pill">
+            <span class="meta-label">Phone</span>
+            <span id="customerContactPhone" class="meta-value">-</span>
+          </div>
+
+          <div class="customer-meta-pill">
+            <span class="meta-label">Balance</span>
+            <span id="customerBalance" class="meta-value">-</span>
+          </div>
+
+          <div class="customer-meta-pill">
+            <span class="meta-label">Last Order</span>
+            <span id="customerLastOrder" class="meta-value">-</span>
+          </div>
+
+          <div class="customer-meta-pill">
+            <span class="meta-label">Credit</span>
+            <span id="customerCreditStatus" class="meta-value">-</span>
+          </div>
+
+          <div class="customer-meta-pill">
+            <span class="meta-label">Terms</span>
+            <span id="customerPaymentTerms" class="meta-value">-</span>
+          </div>
+        </div>
+
+        <div class="customer-address-row">
+          <span class="meta-label">Address</span>
+          <span id="customerAddress" class="meta-value customer-address-value">-</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="main-grid">
+      <div class="left-col">
+        <section class="card product-card">
+          <div class="section-title-row compact-title-row">
+            <h3>Add Product</h3>
+          </div>
+
+          <div class="product-search-wrap">
+            <div class="search-input-wrap product-bar-wrap">
+              <input
+                id="productSearchInput"
+                class="input product-main-input"
+                type="text"
+                placeholder="Search product by name, variant, or SKU"
+                autocomplete="off"
+              />
+              <button id="productSearchBtn" class="product-search-btn" type="button" aria-label="Search product">🔍</button>
+              <div id="productResults" class="overlay-list hidden"></div>
+            </div>
+
+            <div id="quantityModeBox" class="quantity-mode hidden">
+              <div class="quantity-mode-left">
+                <div class="quantity-mode-label">Selected Product</div>
+                <div id="quantityModeProduct" class="quantity-mode-product"></div>
+              </div>
+
+              <div class="quantity-mode-right">
+                <div class="qty-price-row">
+                  <div>
+                    <label for="quantityModeInput">Qty</label>
+                    <input id="quantityModeInput" class="quantity-mode-input" type="text" inputmode="numeric" />
+                  </div>
+
+                  <div>
+                    <label for="priceModeInput">Price</label>
+                    <input id="priceModeInput" class="quantity-mode-input" type="text" inputmode="decimal" />
+                  </div>
+                </div>
+
+                <div class="quantity-quick-buttons">
+                  <button type="button" class="qty-quick-btn" data-qty="1">1</button>
+                  <button type="button" class="qty-quick-btn" data-qty="2">2</button>
+                  <button type="button" class="qty-quick-btn" data-qty="3">3</button>
+                  <button type="button" class="qty-quick-btn" data-qty="5">5</button>
+                  <button type="button" class="qty-quick-btn" data-qty="10">10</button>
+                  <button type="button" class="qty-quick-btn" data-qty="12">12</button>
+                  <button type="button" id="qtyConfirmBtn" class="qty-quick-btn primary">Add</button>
+                </div>
+
+                <div class="quantity-mode-hint">Enter = Add | Esc = Cancel</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card recent-card">
+          <div class="section-title-row compact-title-row">
+            <h3>Recent Purchases and Suggestions</h3>
+          </div>
+
+          <div class="recent-table-scroll">
+            <table class="recent-table">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Variant</th>
+                  <th>Default Price</th>
+                  <th>Last Price</th>
+                  <th>Last Qty</th>
+                  <th>Prev Last Price</th>
+                  <th>Prev Last Qty</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="recentPurchasesBody">
+                <tr>
+                  <td colspan="8" class="empty-state">Select a customer to view product suggestions</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      <div class="right-col">
+        <section class="card order-card">
+          <div class="section-title-row compact-title-row">
+            <h3>Order Items</h3>
+            <button id="clearOrderBtn" class="btn btn-danger-soft">Clear</button>
+          </div>
+
+          <div id="orderItemsList" class="order-items-list">
+            <div class="empty-state">No items added yet</div>
+          </div>
+
+          <div class="order-total-row">
+            <span>Total</span>
+            <span id="orderTotal" class="order-total-value">£0.00</span>
+          </div>
+        </section>
+
+        <section class="card delivery-card">
+          <div class="section-title-row compact-title-row">
+            <h3>Delivery Details</h3>
+          </div>
+
+          <div class="delivery-grid">
+            <div class="field full-span">
+              <label for="deliveryDate">Delivery Date</label>
+              <input id="deliveryDate" class="input" type="date" />
+            </div>
+
+            <div class="field full-span">
+              <label for="driverNotes">Driver Notes</label>
+              <textarea id="driverNotes" class="textarea" placeholder="Driver notes"></textarea>
+            </div>
+
+            <div class="field full-span">
+              <label for="customerNotes">Customer Notes</label>
+              <textarea id="customerNotes" class="textarea" placeholder="Customer notes"></textarea>
+            </div>
+          </div>
+        </section>
+
+        <section class="card action-card">
+          <button id="createInvoiceBtn" class="btn btn-primary-large">Create Invoice</button>
+          <p class="action-note">Phase 1 prototype only</p>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <div id="confirmModal" class="modal-backdrop hidden">
+    <div class="confirm-modal">
+      <div class="confirm-modal-icon">⚠</div>
+      <div class="confirm-modal-title" id="confirmModalTitle">Confirm Action</div>
+      <div class="confirm-modal-message" id="confirmModalMessage">Are you sure?</div>
+
+      <div class="confirm-modal-actions">
+        <button id="confirmModalCancel" class="modal-btn modal-btn-light">Cancel</button>
+        <button id="confirmModalSecondary" class="modal-btn modal-btn-warning hidden">Clear Items</button>
+        <button id="confirmModalConfirm" class="modal-btn modal-btn-primary">Keep Items</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>
